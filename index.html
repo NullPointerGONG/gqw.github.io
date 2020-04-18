@@ -276,7 +276,20 @@
 <h1 id="选择主题"><a href="#选择主题" class="headerlink" title="选择主题"></a>选择主题</h1><p>&emsp;&emsp;在<a href="">主题网站</a>中找到合适的主题，然后clone到themes目录下，根据git上的readme文件配置即可。</p>
 <h2 id="适配主题-demo"><a href="#适配主题-demo" class="headerlink" title="适配主题(demo)"></a>适配主题(demo)</h2><p>&emsp;&emsp;这里以ayer主题为demo，说明一下hexo拉取主题并上传到git的操作。</p>
 <ul>
-<li>找到合适的主题后再themes拉取下来。拉取后的目录如：<img src="/image-20200418203554894.png" alt="image-20200418203554894"><h1 id="hexo相关的命令"><a href="#hexo相关的命令" class="headerlink" title="hexo相关的命令"></a>hexo相关的命令</h1><h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><h2 id="无法在首页的标签显示所有标签值"><a href="#无法在首页的标签显示所有标签值" class="headerlink" title="无法在首页的标签显示所有标签值"></a>无法在首页的标签显示所有标签值</h2></li>
+<li>找到合适的主题后再themes拉取下来。拉取后的目录如：<img src="blog1.png" alt="blog"><h1 id="hexo相关的命令"><a href="#hexo相关的命令" class="headerlink" title="hexo相关的命令"></a>hexo相关的命令</h1></li>
+<li>hexo clean </li>
+<li>hexo g 类似编译</li>
+<li>hexo s 本地启动</li>
+<li>hexo d 吧文件丢到git。<h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><h2 id="无法在首页的标签显示所有标签值"><a href="#无法在首页的标签显示所有标签值" class="headerlink" title="无法在首页的标签显示所有标签值"></a>无法在首页的标签显示所有标签值</h2>&emsp;&emsp;部署到服务器上后，点击首页的分类无记录，但是文章下又有标签。</li>
+<li>解决方式：仔细查看主题的readme文件上面都有说明应该如何创建tag等内容。(应该是不同的主题导致）。比如用的aler主题在创建tag时候格式如下：</li>
+</ul>
+<hr>
+<p>title: 分类<br>date: 2020-04-18 19:17:35<br>type: categories<br>layout: “categories”</p>
+<hr>
+<h2 id="css和js样式无法加载"><a href="#css和js样式无法加载" class="headerlink" title="css和js样式无法加载"></a>css和js样式无法加载</h2><p>&emsp;&emsp;在第一次用主题时候，本地启动后能一切正常，但是部署到git上后发现样式都乱了。切换到默认主题还是会如此。用f12查看是一些css和js加载的路径错误导致。</p>
+<ul>
+<li>解决方式：找到_config.yml文件，在url的root中填写git上仓库的名称<br>url: <a href="http://yoursite.com">http://yoursite.com</a><br>root: /gqw.github.io/<h2 id="主题的图片无法加载"><a href="#主题的图片无法加载" class="headerlink" title="主题的图片无法加载"></a>主题的图片无法加载</h2>&emsp;&emsp;在第一次用主题时候，本地启动后能一切正常，但是部署到git上后，主题对应的图片加载失败，看代码是有提交的。查看后发现是文件加载的路径错误。</li>
+<li>解决方式：找到对应主题的_config.yml文件，在url的root中填写git上仓库的名称，在相应的图片路径前加上仓库的名称，比如：<h1 id="网站图标和侧边栏logo"><a href="#网站图标和侧边栏logo" class="headerlink" title="网站图标和侧边栏logo"></a>网站图标和侧边栏logo</h1>favicon: /gqw.github.io//favicon.ico<br>logo: /gqw.github.io//images/ayer-side.svg</li>
 </ul>
 
       
