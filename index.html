@@ -80,7 +80,7 @@
     
     
     
-    <article id="pages-java/String相关" class="article article-type-pages" itemscope
+    <article id="pages-mvc/请求中传递list和map对象" class="article article-type-pages" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -88,8 +88,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/gqw.github.io/2020/04/19/java/String%E7%9B%B8%E5%85%B3/"
-    >String相关</a> 
+  <a class="article-title" href="/gqw.github.io/2020/04/22/mvc/%E8%AF%B7%E6%B1%82%E4%B8%AD%E4%BC%A0%E9%80%92list%E5%92%8Cmap%E5%AF%B9%E8%B1%A1/"
+    >请求中传递list和map对象</a> 
 </h2>
  
 
@@ -98,8 +98,237 @@
 
     
     <div class="article-meta">
-      <a href="/gqw.github.io/2020/04/19/java/String%E7%9B%B8%E5%85%B3/" class="article-date">
-  <time datetime="2020-04-19T08:01:48.000Z" itemprop="datePublished">2020-04-19</time>
+      <a href="/gqw.github.io/2020/04/22/mvc/%E8%AF%B7%E6%B1%82%E4%B8%AD%E4%BC%A0%E9%80%92list%E5%92%8Cmap%E5%AF%B9%E8%B1%A1/" class="article-date">
+  <time datetime="2020-04-22T06:52:48.000Z" itemprop="datePublished">2020-04-22</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/gqw.github.io/categories/mvc/">mvc</a>
+  </div>
+
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <p>&emsp;&emsp;本文用于介绍在请求时传递的对象包括list和map。</p>
+<h1 id="json的格式"><a href="#json的格式" class="headerlink" title="json的格式"></a>json的格式</h1><p>&emsp;&emsp;参考<a href="http://hwtblog.top/2020/03/21/json-file/" target="_blank" rel="noopener">文章</a>,这篇文章写的挺好的，就不用重复造轮子了。</p>
+<h1 id="后台接收的对象。"><a href="#后台接收的对象。" class="headerlink" title="后台接收的对象。"></a>后台接收的对象。</h1><p>&emsp;&emsp;在实际使用中，后台的接收对象包括一个list和一个map。其实对象也是一个map（可以这么理解）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Data</span><br><span class="line">public class ApplyReq  extends  BaseReq&#123;</span><br><span class="line">    private String id;</span><br><span class="line">    private String name;</span><br><span class="line">    private List&lt;ApplyGroupEntity&gt; applyGroupEntityList;</span><br><span class="line">    &#x2F;&#x2F;组对应的专题图</span><br><span class="line">    private Map&lt;Integer,List&lt;Integer&gt;&gt; groupThematic;</span><br><span class="line">    private Float speed;</span><br><span class="line">    private Integer pictureNumber;</span><br><span class="line">    private String desc;</span><br><span class="line">    &#x2F;&#x2F;审核状态</span><br><span class="line">    private Integer auditStatus;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="请求的json格式。"><a href="#请求的json格式。" class="headerlink" title="请求的json格式。"></a>请求的json格式。</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">&quot;name&quot;:&quot;insert.by.gqw&quot;,</span><br><span class="line">&quot;speed&quot;:3,</span><br><span class="line">&quot;pictureNumber&quot;:2,</span><br><span class="line">&quot;desc&quot;:23,</span><br><span class="line">&quot;applyGroupEntityList&quot;:[</span><br><span class="line">&#123;&quot;name&quot;:&quot;父组&quot;,&quot;id&quot;:&quot;1&quot;,&quot;child_ids&quot;:&quot;2,3&quot;&#125;,</span><br><span class="line">&#123;&quot;name&quot;:&quot;子组1&quot;,&quot;id&quot;:&quot;2&quot;,&quot;parentId&quot;:&quot;1&quot;&#125;,</span><br><span class="line">&#123;&quot;name&quot;:&quot;子组2&quot;,&quot;id&quot;:&quot;3&quot;,&quot;parentId&quot;:&quot;1&quot;&#125;</span><br><span class="line">],</span><br><span class="line">&quot;groupThematic&quot;:&#123;</span><br><span class="line">       &quot;2&quot;:[21,22,23],</span><br><span class="line">       &quot;3&quot;:[31,32,33]</span><br><span class="line">     </span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/mvc/" rel="tag">mvc</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/url/" rel="tag">url</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/%E9%9B%86%E5%90%88/" rel="tag">集合</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+  
+  
+
+</article>
+    
+    <article id="pages-idea/快捷键" class="article article-type-pages" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/gqw.github.io/2020/04/21/idea/%E5%BF%AB%E6%8D%B7%E9%94%AE/"
+    >idea常用快捷键</a> 
+</h2>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/gqw.github.io/2020/04/21/idea/%E5%BF%AB%E6%8D%B7%E9%94%AE/" class="article-date">
+  <time datetime="2020-04-21T06:23:48.000Z" itemprop="datePublished">2020-04-21</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/gqw.github.io/categories/idea/">idea</a>
+  </div>
+
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <p>&emsp;&emsp;本文用于介绍常用的快捷键。</p>
+<h1 id="alt-数字组合"><a href="#alt-数字组合" class="headerlink" title="alt+数字组合"></a>alt+数字组合</h1><p>&emsp;&emsp;alt+数字通常用于打开界面</p>
+<ul>
+<li>alt+1打开项目目录</li>
+<li>alt+2打开favorite</li>
+<li>alt+4打开run界面</li>
+<li>alt+5打开debug界面。</li>
+<li>alt+6打开todo界面<h1 id="快速调转的快捷键"><a href="#快速调转的快捷键" class="headerlink" title="快速调转的快捷键"></a>快速调转的快捷键</h1></li>
+<li>crtl+b调转变量名称（方法名）<h1 id="重构快捷键"><a href="#重构快捷键" class="headerlink" title="重构快捷键"></a>重构快捷键</h1></li>
+<li>crtl+o：快速实现或重写方法</li>
+</ul>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/idea/" rel="tag">idea</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/%E5%BF%AB%E6%8D%B7%E9%94%AE/" rel="tag">快捷键</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+  
+  
+
+</article>
+    
+    <article id="pages-idea/取消大小写敏感" class="article article-type-pages" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/gqw.github.io/2020/04/21/idea/%E5%8F%96%E6%B6%88%E5%A4%A7%E5%B0%8F%E5%86%99%E6%95%8F%E6%84%9F/"
+    >取消大小写敏感</a> 
+</h2>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/gqw.github.io/2020/04/21/idea/%E5%8F%96%E6%B6%88%E5%A4%A7%E5%B0%8F%E5%86%99%E6%95%8F%E6%84%9F/" class="article-date">
+  <time datetime="2020-04-21T06:23:48.000Z" itemprop="datePublished">2020-04-21</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/gqw.github.io/categories/idea/">idea</a>
+  </div>
+
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <p>  <img src="/gqw.github.io/2020/04/21/idea/%E5%8F%96%E6%B6%88%E5%A4%A7%E5%B0%8F%E5%86%99%E6%95%8F%E6%84%9F/1.png" alt="取消大小写敏感"></p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/idea/" rel="tag">idea</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+  
+  
+
+</article>
+    
+    <article id="pages-java/Collection相关" class="article article-type-pages" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/gqw.github.io/2020/04/20/java/Collection%E7%9B%B8%E5%85%B3/"
+    >Collection（集合)相关</a> 
+</h2>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/gqw.github.io/2020/04/20/java/Collection%E7%9B%B8%E5%85%B3/" class="article-date">
+  <time datetime="2020-04-20T06:52:48.000Z" itemprop="datePublished">2020-04-20</time>
 </a>
       
   <div class="article-category">
@@ -120,12 +349,16 @@
       
 
       
-      <p>&emsp;&emsp; 用来记录一些Stirng常用的方法。</p>
-<h1 id="将String类型转换为int类型"><a href="#将String类型转换为int类型" class="headerlink" title="将String类型转换为int类型"></a>将String类型转换为int类型</h1><p>&emsp;&emsp; 在讲String转换为int类似的时候，使用的Integer.valueOf()方法，但是如果字符串为”232.2”会报错。<br>&emsp;&emsp; 解决方案：应该先使用Double.valueOf().intValue()方法，这样能保证代码的严谨。</p>
-<h1 id="String的intern方法"><a href="#String的intern方法" class="headerlink" title="String的intern方法"></a>String的intern方法</h1><h2 id="intern方法的用途。"><a href="#intern方法的用途。" class="headerlink" title="intern方法的用途。"></a>intern方法的用途。</h2><p>&emsp;&emsp; 关于字符串String中的intern方法，是当前的字符对象（通过new出来的对象）可以使用intern方法从常量池中获取，如果常量池中不存在该字符串，那么就新建一个这样的字符串放到常量池中。</p>
-<h1 id="字符串向左填充值"><a href="#字符串向左填充值" class="headerlink" title="字符串向左填充值"></a>字符串向左填充值</h1><p>&emsp;&emsp; 经常会出现将字符串”2”填充为”0002“的情况，使用如下代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String.format(&quot;%03d&quot;, Integer.valueOf(code))</span><br></pre></td></tr></table></figure>
-<h1 id="连接字符串"><a href="#连接字符串" class="headerlink" title="连接字符串"></a>连接字符串</h1><p>&emsp;&emsp; 以前为了拼接字符串，通常会用+来拼接。更好的可以用concat()来拼接。</p>
+      <p>&emsp;&emsp;本文用于介绍Collection相关的方法。</p>
+<h1 id="contain方法"><a href="#contain方法" class="headerlink" title="contain方法"></a>contain方法</h1><p>​&emsp;&emsp;    代码如下：在使用contain方法得时候，判断得是一个对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Region region = regionListFromSql.get(<span class="number">0</span>);</span><br><span class="line">          String cityCode =region.getCityCode();</span><br><span class="line">          String cityName =region.getCityName();</span><br><span class="line">          <span class="keyword">if</span> (StringUtils.isBlank(cityCode)) &#123;</span><br><span class="line">              <span class="keyword">throw</span> <span class="keyword">new</span> ServiceException(<span class="string">"citycode为空"</span>);</span><br><span class="line">          &#125;</span><br><span class="line">          RegionVO regionVO=<span class="keyword">new</span> RegionVO(cityCode,cityName);</span><br><span class="line">          <span class="keyword">if</span> (!returnRegionList.contains(regionVO)) &#123;</span><br><span class="line">              returnRegionList.add(regionVO);</span><br><span class="line">          &#125;</span><br></pre></td></tr></table></figure>
+
+<p>​&emsp;&emsp;源码如下：其实判断得就是equals方法，如果regionVO对象中没有重写equlas方法得话那么就是调用得Object。</p>
+<p>这也就是为什么说我们在写pojo对象得时候，需要重写hashcode方法和equals方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">indexOf</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (o == <span class="keyword">null</span>) &#123;</span><br><span class="line">          <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">              <span class="keyword">if</span> (elementData[i]==<span class="keyword">null</span>)</span><br><span class="line">                  <span class="keyword">return</span> i;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">              <span class="keyword">if</span> (o.equals(elementData[i]))</span><br><span class="line">                  <span class="keyword">return</span> i;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+
+
 
       
       <!-- reward -->
@@ -138,7 +371,7 @@
     <footer class="article-footer">
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/%E5%8E%9A%E7%A7%AF%E8%96%84%E5%8F%91/" rel="tag">厚积薄发</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/java/" rel="tag">java</a></li></ul>
 
 
     </footer>
@@ -157,7 +390,7 @@
 
 </article>
     
-    <article id="pages-SpringBoot/快速创建一个boot项目" class="article article-type-pages" itemscope
+    <article id="pages-SpringBoot/springBoot常用的yml文件配置" class="article article-type-pages" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -165,8 +398,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/gqw.github.io/2020/04/19/SpringBoot/%E5%BF%AB%E9%80%9F%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAboot%E9%A1%B9%E7%9B%AE/"
-    >快速启动springBoot</a> 
+  <a class="article-title" href="/gqw.github.io/2020/04/20/SpringBoot/springBoot%E5%B8%B8%E7%94%A8%E7%9A%84yml%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AE/"
+    >springBoot常用配置(yml）文件</a> 
 </h2>
  
 
@@ -175,8 +408,8 @@
 
     
     <div class="article-meta">
-      <a href="/gqw.github.io/2020/04/19/SpringBoot/%E5%BF%AB%E9%80%9F%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAboot%E9%A1%B9%E7%9B%AE/" class="article-date">
-  <time datetime="2020-04-19T08:01:48.000Z" itemprop="datePublished">2020-04-19</time>
+      <a href="/gqw.github.io/2020/04/20/SpringBoot/springBoot%E5%B8%B8%E7%94%A8%E7%9A%84yml%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AE/" class="article-date">
+  <time datetime="2020-04-20T06:52:48.000Z" itemprop="datePublished">2020-04-20</time>
 </a>
       
   <div class="article-category">
@@ -197,8 +430,15 @@
       
 
       
-      <p>&emsp;&emsp; 本文用于描述快速的创建一个springBoot项目。<br>打开<a href="https://start.spring.io/" target="_blank" rel="noopener">创建网站</a>，按照上面的提示填写内容，选择框架即可。截图如下<img src="/gqw.github.io/2020/04/19/SpringBoot/%E5%BF%AB%E9%80%9F%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAboot%E9%A1%B9%E7%9B%AE/quickStart.png" alt="wew"></p>
+      <p>&emsp;&emsp; 本文用于介绍springBoot中常用的配置。</p>
+<h1 id="数据库配置"><a href="#数据库配置" class="headerlink" title="数据库配置"></a>数据库配置</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  datasource:</span><br><span class="line">    url: jdbc:mysql:&#x2F;&#x2F;localhost:3306&#x2F;demo1?serverTimezone&#x3D;UTC&amp;useUnicode&#x3D;true&amp;characterEncoding&#x3D;utf8&amp;useSSL&#x3D;false</span><br><span class="line">    username: root</span><br><span class="line">    password: root</span><br><span class="line">    driver-class-name: com.mysql.jdbc.Driver</span><br></pre></td></tr></table></figure>
 
+
+<h1 id="启用哪个配置文件"><a href="#启用哪个配置文件" class="headerlink" title="启用哪个配置文件"></a>启用哪个配置文件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line"> profiles:</span><br><span class="line">    active: dev</span><br></pre></td></tr></table></figure>
+<h1 id="如何在控制台输出sqlyuju"><a href="#如何在控制台输出sqlyuju" class="headerlink" title="如何在控制台输出sqlyuju"></a>如何在控制台输出sqlyuju</h1><p>&emsp;&emsp; 添加如下配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mybatis:</span><br><span class="line">#  type-aliases-package: com.**.entity</span><br><span class="line">  configuration:</span><br><span class="line">    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl</span><br></pre></td></tr></table></figure>
+<h1 id="配置启动的上下文。"><a href="#配置启动的上下文。" class="headerlink" title="配置启动的上下文。"></a>配置启动的上下文。</h1><p>&emsp;&emsp; springboot 2.0之前，配置为 server.context-path。springboot 2.0之后，配置为 server.servlet.context-path</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8080</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: &#x2F;view-picture</span><br></pre></td></tr></table></figure>
       
       <!-- reward -->
       
@@ -229,7 +469,7 @@
 
 </article>
     
-    <article id="pages-工作设计/合理使用常量" class="article article-type-pages" itemscope
+    <article id="pages-三方api/利用高德地图api实现搜索功能" class="article article-type-pages" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -237,8 +477,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/gqw.github.io/2020/04/19/%E5%B7%A5%E4%BD%9C%E8%AE%BE%E8%AE%A1/%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8%E5%B8%B8%E9%87%8F/"
-    >合理使用常量</a> 
+  <a class="article-title" href="/gqw.github.io/2020/04/20/%E4%B8%89%E6%96%B9api/%E5%88%A9%E7%94%A8%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BEapi%E5%AE%9E%E7%8E%B0%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD/"
+    >利用高德地图api实现搜索功能</a> 
 </h2>
  
 
@@ -247,12 +487,12 @@
 
     
     <div class="article-meta">
-      <a href="/gqw.github.io/2020/04/19/%E5%B7%A5%E4%BD%9C%E8%AE%BE%E8%AE%A1/%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8%E5%B8%B8%E9%87%8F/" class="article-date">
-  <time datetime="2020-04-19T07:01:48.000Z" itemprop="datePublished">2020-04-19</time>
+      <a href="/gqw.github.io/2020/04/20/%E4%B8%89%E6%96%B9api/%E5%88%A9%E7%94%A8%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BEapi%E5%AE%9E%E7%8E%B0%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD/" class="article-date">
+  <time datetime="2020-04-20T06:52:48.000Z" itemprop="datePublished">2020-04-20</time>
 </a>
       
   <div class="article-category">
-    <a class="article-category-link" href="/gqw.github.io/categories/%E5%B7%A5%E4%BD%9C%E8%AE%BE%E8%AE%A1/">工作设计</a>
+    <a class="article-category-link" href="/gqw.github.io/categories/%E4%B8%89%E6%96%B9api/">三方api</a>
   </div>
 
       
@@ -269,86 +509,17 @@
       
 
       
-      <p>&emsp;&emsp; 有次接手的代码是这么写的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Value(&quot;$&#123;month.surface.temp.output.file.path&#125;&quot;)</span><br><span class="line">private String outputGribFilePath;  &#x2F;&#x2F;(绘图文件保存路径)</span><br></pre></td></tr></table></figure>
-<p>然后在项目中用有这么一行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">outputGribFilePat&#x3D;outputGribFilePath.concat(year)</span><br></pre></td></tr></table></figure>
-<p>而这个方法是会重复执行的，也就是outputGribFilePat的值会一直变化，想要的其实只是读取properties文件后的outputGribFilePath拼接年份即可。<br>正常的使应该是将outputGribFilePath设置为一个常量</p>
-
-      
-      <!-- reward -->
-      
-    </div>
-    
-    
-      <!-- copyright -->
-      
-    <footer class="article-footer">
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/%E8%AE%BE%E8%AE%A1/" rel="tag">设计</a></li></ul>
-
-
-    </footer>
-
-  </div>
-
-  
-
-  
-  
-  
-
-  
-  
-  
-
-</article>
-    
-    <article id="pages-bug/maven项目解析jsp失败" class="article article-type-pages" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/gqw.github.io/2020/04/19/bug/maven%E9%A1%B9%E7%9B%AE%E8%A7%A3%E6%9E%90jsp%E5%A4%B1%E8%B4%A5/"
-    >maven项目解析jsp失败</a> 
-</h2>
- 
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/gqw.github.io/2020/04/19/bug/maven%E9%A1%B9%E7%9B%AE%E8%A7%A3%E6%9E%90jsp%E5%A4%B1%E8%B4%A5/" class="article-date">
-  <time datetime="2020-04-19T07:01:48.000Z" itemprop="datePublished">2020-04-19</time>
-</a>
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/gqw.github.io/categories/bug/">bug</a>
-  </div>
-
-      
-      
-      
-    </div>
-    
-
-    
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-
-      
-      <p>&emsp;&emsp; 接手一个项目(比较老的那种，用jsp写的）然后发现初始化有个bug：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Unable to compile class for JSP</span><br></pre></td></tr></table></figure>
-<ul>
-<li>解决：这里由于tomcat和jdk版本不一致导致的。</li>
+      <p>&emsp;&emsp; 有在项目中用到了使用高德地图来搜索poi的点。</p>
+<h1 id="使用高德等地图api实现搜索功能"><a href="#使用高德等地图api实现搜索功能" class="headerlink" title="使用高德等地图api实现搜索功能"></a>使用高德等地图api实现搜索功能</h1><ul>
+<li>参考<a href="https://lbs.amap.com/api/webservice/summary/" target="_blank" rel="noopener">网站</a>，里面有详细介绍高德地图api</li>
+<li>登录高德地图，找到控制台。<br><img src="/gqw.github.io/2020/04/20/%E4%B8%89%E6%96%B9api/%E5%88%A9%E7%94%A8%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BEapi%E5%AE%9E%E7%8E%B0%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD/1.png" alt="利用高德地图api实现搜索功能"></li>
+<li>新建应用。<img src="/gqw.github.io/2020/04/20/%E4%B8%89%E6%96%B9api/%E5%88%A9%E7%94%A8%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BEapi%E5%AE%9E%E7%8E%B0%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD/2.png" alt="利用高德地图api实现搜索功能"><ul>
+<li>添加key。找到文档中的poi搜索。</li>
+</ul>
+</li>
+<li>调用请求：    <a href="https://restapi.amap.com/v3/place/text?keywords=北京大学&amp;city=beijing&amp;output=xml&amp;offset=20&amp;page=1&amp;key=" target="_blank" rel="noopener">https://restapi.amap.com/v3/place/text?keywords=北京大学&amp;city=beijing&amp;output=xml&amp;offset=20&amp;page=1&amp;key=</a>&lt;用户的key&gt;&amp;extensions=all</li>
+<li>代码如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void SearchPOITest() &#123;</span><br><span class="line">    String url &#x3D; &quot;https:&#x2F;&#x2F;restapi.amap.com&#x2F;v3&#x2F;place&#x2F;text?keywords&#x3D;学&amp;city&#x3D;南昌&amp;output&#x3D;json&amp;offset&#x3D;20&amp;page&#x3D;1&amp;key&#x3D;&quot;.concat(key).concat(&quot;&amp;extensions&#x3D;all&quot;);</span><br><span class="line">    String msg &#x3D; HttpUtil.get(url);</span><br><span class="line">    System.out.println(msg);</span><br><span class="line">    if (StringUtils.isBlank(msg)) &#123;</span><br><span class="line">        log.error(&quot;请求失败，返回msg为空&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 
       
@@ -362,7 +533,7 @@
     <footer class="article-footer">
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/bug/" rel="tag">bug</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/maven/" rel="tag">maven</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/%E4%B8%89%E6%96%B9api/" rel="tag">三方api</a></li></ul>
 
 
     </footer>
@@ -381,7 +552,7 @@
 
 </article>
     
-    <article id="pages-SpringBoot/springBoot整合SwaggerUI" class="article article-type-pages" itemscope
+    <article id="pages-mysql/msyql常见问题" class="article article-type-pages" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -389,8 +560,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/gqw.github.io/2020/04/19/SpringBoot/springBoot%E6%95%B4%E5%90%88SwaggerUI/"
-    >springBoot整合swaggerUI</a> 
+  <a class="article-title" href="/gqw.github.io/2020/04/20/mysql/msyql%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/"
+    >mysql常见问题</a> 
 </h2>
  
 
@@ -399,12 +570,12 @@
 
     
     <div class="article-meta">
-      <a href="/gqw.github.io/2020/04/19/SpringBoot/springBoot%E6%95%B4%E5%90%88SwaggerUI/" class="article-date">
-  <time datetime="2020-04-19T07:01:48.000Z" itemprop="datePublished">2020-04-19</time>
+      <a href="/gqw.github.io/2020/04/20/mysql/msyql%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="article-date">
+  <time datetime="2020-04-20T06:52:48.000Z" itemprop="datePublished">2020-04-20</time>
 </a>
       
   <div class="article-category">
-    <a class="article-category-link" href="/gqw.github.io/categories/springBoot/">springBoot</a>
+    <a class="article-category-link" href="/gqw.github.io/categories/mysql/">mysql</a>
   </div>
 
       
@@ -421,11 +592,84 @@
       
 
       
-      <p>&emsp;&emsp; 本文用于就介绍springBoot整合swaggerUI。</p>
-<h1 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h1><ul>
-<li>从springBoot官网上快速创建一个springBoot项目。</li>
-<li>参考<a href="https://www.jianshu.com/p/406e9d203300" target="_blank" rel="noopener">网站</a>按照上面的步骤，启动项目即可。</li>
-<li>自己创建的项目地址为：<a href>springBoot整合swaggerUI仓库地址</a></li>
+      <p>&emsp;&emsp; 本文用于介绍在使用mysql过程中遇到的一些问题。</p>
+<h1 id="Access-denied-for-user-‘root’-’localhost’-using-password-YES"><a href="#Access-denied-for-user-‘root’-’localhost’-using-password-YES" class="headerlink" title="Access denied for user ‘root’@’localhost’ (using password: YES)"></a>Access denied for user ‘root’@’localhost’ (using password: YES)</h1><p>&emsp;&emsp;在使用mysql -u root -p 来连接到数据库的时候报错，根据提示连接被拒绝，但是密码是正确的。<br>这里和密码无关，输入错误的密码也是报这个错误。重置密码就可以了，重置密码参考笔记：mysql如何重置密码：</p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/mysql/" rel="tag">mysql</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+  
+  
+
+</article>
+    
+    <article id="pages-linux/安装部署/安装git" class="article article-type-pages" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/gqw.github.io/2020/04/20/linux/%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/%E5%AE%89%E8%A3%85git/"
+    >安装git</a> 
+</h2>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/gqw.github.io/2020/04/20/linux/%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/%E5%AE%89%E8%A3%85git/" class="article-date">
+  <time datetime="2020-04-20T06:21:48.000Z" itemprop="datePublished">2020-04-20</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/gqw.github.io/categories/linux-%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">linux->安装部署</a>
+  </div>
+
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <h1 id="Linux上按照git并配置环境变量。"><a href="#Linux上按照git并配置环境变量。" class="headerlink" title="Linux上按照git并配置环境变量。"></a>Linux上按照git并配置环境变量。</h1><h2 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h2><ul>
+<li>使用命令：yum install git<img src="/gqw.github.io/2020/04/20/linux/%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/%E5%AE%89%E8%A3%85git/1.png" alt="安装git"></li>
+<li>会提示是否需要下载：<img src="/gqw.github.io/2020/04/20/linux/%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/%E5%AE%89%E8%A3%85git/2.png" alt="安装git"></li>
+<li>下载完后就可以了。使用 git –version 可以验证git是否安装成功。</li>
+<li>yum安装git被安装在/usr/libexec/git-core目录下。 </li>
 </ul>
 
       
@@ -439,7 +683,7 @@
     <footer class="article-footer">
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/springBoot/" rel="tag">springBoot</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/%E6%95%B4%E5%90%88/" rel="tag">整合</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/git/" rel="tag">git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/linux/" rel="tag">linux</a></li></ul>
 
 
     </footer>
@@ -458,7 +702,7 @@
 
 </article>
     
-    <article id="pages-bug/代码中发送请求提升无协议" class="article article-type-pages" itemscope
+    <article id="pages-idea/多个文件显示在tab上" class="article article-type-pages" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -466,8 +710,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/gqw.github.io/2020/04/19/bug/%E4%BB%A3%E7%A0%81%E4%B8%AD%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82%E6%8F%90%E5%8D%87%E6%97%A0%E5%8D%8F%E8%AE%AE/"
-    >代码中发送请求提示无协议</a> 
+  <a class="article-title" href="/gqw.github.io/2020/04/20/idea/%E5%A4%9A%E4%B8%AA%E6%96%87%E4%BB%B6%E6%98%BE%E7%A4%BA%E5%9C%A8tab%E4%B8%8A/"
+    >多个文件显示在tab上</a> 
 </h2>
  
 
@@ -476,12 +720,12 @@
 
     
     <div class="article-meta">
-      <a href="/gqw.github.io/2020/04/19/bug/%E4%BB%A3%E7%A0%81%E4%B8%AD%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82%E6%8F%90%E5%8D%87%E6%97%A0%E5%8D%8F%E8%AE%AE/" class="article-date">
-  <time datetime="2020-04-19T07:00:48.000Z" itemprop="datePublished">2020-04-19</time>
+      <a href="/gqw.github.io/2020/04/20/idea/%E5%A4%9A%E4%B8%AA%E6%96%87%E4%BB%B6%E6%98%BE%E7%A4%BA%E5%9C%A8tab%E4%B8%8A/" class="article-date">
+  <time datetime="2020-04-20T06:21:48.000Z" itemprop="datePublished">2020-04-20</time>
 </a>
       
   <div class="article-category">
-    <a class="article-category-link" href="/gqw.github.io/categories/bug/">bug</a>
+    <a class="article-category-link" href="/gqw.github.io/categories/idea/">idea</a>
   </div>
 
       
@@ -498,232 +742,9 @@
       
 
       
-      <p>&emsp;&emsp; 在有次通过代码执行https请求时候发现提升无协议：报错信息如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">url:&quot;http:&#x2F;&#x2F;10.124.42.8:9099&#x2F;ai-adapt&#x2F;image&#x2F;stationGroup?dateTime&#x3D;2020-01-04%2017:47:56&amp;number&#x3D;2</span><br><span class="line">发送GET请求出现异常！java.net.MalformedURLException: no protocol: &quot;http:&#x2F;&#x2F;10.124.42.8:9099&#x2F;ai-adapt&#x2F;image&#x2F;stationGroup?dateTime&#x3D;2020-01-04%2017:47:56&amp;number&#x3D;2</span><br><span class="line">java.net.MalformedURLException: no protocol: &quot;http:&#x2F;&#x2F;10.124.42.8:9099&#x2F;ai-adapt&#x2F;image&#x2F;stationGroup?dateTime&#x3D;2020-01-04%2017:47:56&amp;number&#x3D;2</span><br><span class="line">at java.net.URL.&lt;init&gt;(URL.java:593)</span><br><span class="line">at java.net.URL.&lt;init&gt;(URL.java:490)</span><br></pre></td></tr></table></figure>
-<p>&emsp;&emsp;解决：经仔细查看发现是properties文件写错了。当时写法如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jhUrl&#x3D;&quot;http:&#x2F;&#x2F;10.124.42.8:9093&#x2F;ai-adapt&#x2F;&quot;</span><br><span class="line">aiUrl&#x3D;&quot;http:&#x2F;&#x2F;10.124.42.8:9099&#x2F;ai-adapt&#x2F;&quot;</span><br></pre></td></tr></table></figure>
-<p>正确的写法不应该带冒号。</p>
-
-      
-      <!-- reward -->
-      
-    </div>
-    
-    
-      <!-- copyright -->
-      
-    <footer class="article-footer">
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/bug/" rel="tag">bug</a></li></ul>
-
-
-    </footer>
-
-  </div>
-
-  
-
-  
-  
-  
-
-  
-  
-  
-
-</article>
-    
-    <article id="pages-bug/数据库连接错误" class="article article-type-pages" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/gqw.github.io/2020/04/19/bug/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E9%94%99%E8%AF%AF/"
-    >mysql相关bug（代码方面）</a> 
-</h2>
- 
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/gqw.github.io/2020/04/19/bug/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E9%94%99%E8%AF%AF/" class="article-date">
-  <time datetime="2020-04-19T07:00:48.000Z" itemprop="datePublished">2020-04-19</time>
-</a>
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/gqw.github.io/categories/bug/">bug</a>
-  </div>
-
-      
-      
-      
-    </div>
-    
-
-    
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-
-      
-      <p>&emsp;&emsp; 用于记录mysql的相关bug（代码方面）</p>
-<h1 id="初始化数据库连接–biginteger转换string异常"><a href="#初始化数据库连接–biginteger转换string异常" class="headerlink" title="初始化数据库连接–biginteger转换string异常"></a>初始化数据库连接–biginteger转换string异常</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Caused by: org.springframework.beans.factory.BeanCreationException: </span><br><span class="line">Error creating bean with name &#39;dataSource&#39; defined in file [E:\桌面\工作区2019末\精细化引擎\twsp-sbs\Trunk\twsp_sbs\target\twsp_sbs\WEB-INF\classes\applicationContext.xml]: </span><br><span class="line">Invocation of init method failed; nested exception is java.sql.SQLException: java.lang.ClassCastException: </span><br><span class="line">java.math.BigInteger cannot be cast to java.lang.Long</span><br></pre></td></tr></table></figure>
-<p>&emsp;&emsp; 解决方案：更换mysql的版本即可。</p>
-
-      
-      <!-- reward -->
-      
-    </div>
-    
-    
-      <!-- copyright -->
-      
-    <footer class="article-footer">
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/bug/" rel="tag">bug</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/mysql/" rel="tag">mysql</a></li></ul>
-
-
-    </footer>
-
-  </div>
-
-  
-
-  
-  
-  
-
-  
-  
-  
-
-</article>
-    
-    <article id="pages-bug/请求404" class="article article-type-pages" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/gqw.github.io/2020/04/19/bug/%E8%AF%B7%E6%B1%82404/"
-    >请求404</a> 
-</h2>
- 
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/gqw.github.io/2020/04/19/bug/%E8%AF%B7%E6%B1%82404/" class="article-date">
-  <time datetime="2020-04-19T07:00:48.000Z" itemprop="datePublished">2020-04-19</time>
-</a>
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/gqw.github.io/categories/bug/">bug</a>
-  </div>
-
-      
-      
-      
-    </div>
-    
-
-    
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-
-      
-      <p>&emsp;&emsp;对于请求404更多的都是去找下是不是路径写错了，单词写错了。这次遇到这样的一个错误：请求其他路径是可以的（项目没问题）。然后路径都是复制过去的。打印出请求路径的日志。全局搜索后发现：@requestmapping的值有重复值，导致出现404.</p>
-
-      
-      <!-- reward -->
-      
-    </div>
-    
-    
-      <!-- copyright -->
-      
-    <footer class="article-footer">
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/bug/" rel="tag">bug</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/mvc/" rel="tag">mvc</a></li></ul>
-
-
-    </footer>
-
-  </div>
-
-  
-
-  
-  
-  
-
-  
-  
-  
-
-</article>
-    
-    <article id="pages-工作设计/sftp，ftp接收端" class="article article-type-pages" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/gqw.github.io/2020/04/19/%E5%B7%A5%E4%BD%9C%E8%AE%BE%E8%AE%A1/sftp%EF%BC%8Cftp%E6%8E%A5%E6%94%B6%E7%AB%AF/"
-    >sftp（ftp)接收端</a> 
-</h2>
- 
-
-    </header>
-    
-
-    
-    <div class="article-meta">
-      <a href="/gqw.github.io/2020/04/19/%E5%B7%A5%E4%BD%9C%E8%AE%BE%E8%AE%A1/sftp%EF%BC%8Cftp%E6%8E%A5%E6%94%B6%E7%AB%AF/" class="article-date">
-  <time datetime="2020-04-19T06:52:48.000Z" itemprop="datePublished">2020-04-19</time>
-</a>
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/gqw.github.io/categories/%E5%B7%A5%E4%BD%9C%E8%AE%BE%E8%AE%A1/">工作设计</a>
-  </div>
-
-      
-      
-      
-    </div>
-    
-
-    
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-
-      
-      <p>&emsp;&emsp; 在接收文件得时候要验证（监控）：接收过来得文件是完整得。</p>
-<ul>
-<li>接收过来得文件很可能是有重复得（比如在补发等等情况),所以这些要保证数据能覆盖并且数据完整。</li>
-<li>解决方法一：收到得数据是用于入库得，那么在数据库这里验证数据是否完整得。</li>
+      <ul>
+<li>截图如下：<img src="/gqw.github.io/2020/04/20/idea/%E5%A4%9A%E4%B8%AA%E6%96%87%E4%BB%B6%E6%98%BE%E7%A4%BA%E5%9C%A8tab%E4%B8%8A/1.png" alt="多个文件显示在tab上"></li>
+<li>效果如下：<img src="/gqw.github.io/2020/04/20/idea/%E5%A4%9A%E4%B8%AA%E6%96%87%E4%BB%B6%E6%98%BE%E7%A4%BA%E5%9C%A8tab%E4%B8%8A/2.png" alt="多个文件显示在tab上"></li>
 </ul>
 
       
@@ -737,7 +758,7 @@
     <footer class="article-footer">
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/%E8%AE%BE%E8%AE%A1/" rel="tag">设计</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/idea/" rel="tag">idea</a></li></ul>
 
 
     </footer>
@@ -756,7 +777,7 @@
 
 </article>
     
-    <article id="pages-linux/命令/查看当前linux的版本" class="article article-type-pages" itemscope
+    <article id="pages-mysql/count(列)和count(）的区别" class="article article-type-pages" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -764,8 +785,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/gqw.github.io/2020/04/19/linux/%E5%91%BD%E4%BB%A4/%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8Dlinux%E7%9A%84%E7%89%88%E6%9C%AC/"
-    >查看当前linux的版本</a> 
+  <a class="article-title" href="/gqw.github.io/2020/04/20/mysql/count(%E5%88%97)%E5%92%8Ccount(%EF%BC%89%E7%9A%84%E5%8C%BA%E5%88%AB/"
+    >count(列)和count(*)的区别</a> 
 </h2>
  
 
@@ -774,12 +795,12 @@
 
     
     <div class="article-meta">
-      <a href="/gqw.github.io/2020/04/19/linux/%E5%91%BD%E4%BB%A4/%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8Dlinux%E7%9A%84%E7%89%88%E6%9C%AC/" class="article-date">
-  <time datetime="2020-04-19T06:37:48.000Z" itemprop="datePublished">2020-04-19</time>
+      <a href="/gqw.github.io/2020/04/20/mysql/count(%E5%88%97)%E5%92%8Ccount(%EF%BC%89%E7%9A%84%E5%8C%BA%E5%88%AB/" class="article-date">
+  <time datetime="2020-04-20T06:21:48.000Z" itemprop="datePublished">2020-04-20</time>
 </a>
       
   <div class="article-category">
-    <a class="article-category-link" href="/gqw.github.io/categories/linux-%E5%91%BD%E4%BB%A4/">linux->命令</a>
+    <a class="article-category-link" href="/gqw.github.io/categories/mysql/">mysql</a>
   </div>
 
       
@@ -796,9 +817,7 @@
       
 
       
-      <h1 id="使用命令"><a href="#使用命令" class="headerlink" title="使用命令"></a>使用命令</h1><ul>
-<li>getconf LONG_BIT返回的结果是32位或64位即可。</li>
-</ul>
+      <h2 id="count-和count（常量-count-列"><a href="#count-和count（常量-count-列" class="headerlink" title="count(*)和count（常量),count(列)"></a>count(*)和count（常量),count(列)</h2><p>​    要使用 count(列名)或 count(常量)来替代 count(<em>)，count(</em>)是 SQL92 定义的标准统计行数的语法，跟数据库无关，跟 NULL 和非 NULL 无关。说明：count(*)会统计值为 NULL 的行，而 count(列名)不统计此列为 NULL 值的行。</p>
 
       
       <!-- reward -->
@@ -811,7 +830,7 @@
     <footer class="article-footer">
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/linux/" rel="tag">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/%E5%91%BD%E4%BB%A4/" rel="tag">命令</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/gqw.github.io/tags/mysql/" rel="tag">mysql</a></li></ul>
 
 
     </footer>
@@ -836,7 +855,7 @@
   
   <nav class="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/gqw.github.io/page/2/">2</a><a class="extend next" rel="next" href="/gqw.github.io/page/2/">下一页</a>
+    <span class="page-number current">1</span><a class="page-number" href="/gqw.github.io/page/2/">2</a><a class="page-number" href="/gqw.github.io/page/3/">3</a><a class="extend next" rel="next" href="/gqw.github.io/page/2/">下一页</a>
   </nav>
   
 </section>
